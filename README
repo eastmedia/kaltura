@@ -1,0 +1,24 @@
+Kaltura API
+======================
+
+An ActiveResource-like RESTful interface to the Kaltura API
+
+You can copy the templates/kaltura.yml.template file into your Rails app as config/kaltura.yml.
+Replace the values with your own partner info that you received from Kaltura.
+
+Specs are to test the Kaltura API directly, not this library itself.
+
+Pre-requisites
+======================
+
+* ActiveSupport
+* ActiveResource
+
+
+Credits
+======================
+
+Developed by EastMedia - http://eastmedia.com
+Sponsored by Remix America
+
+Copyright (c) 2008
