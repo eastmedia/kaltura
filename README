@@ -14,11 +14,11 @@ Pre-requisites
 * ActiveSupport
 * ActiveResource
 
-
 Credits
 ======================
 
-Developed by EastMedia - http://eastmedia.com
-Sponsored by Remix America
+Developed by Eastmedia (http://eastmedia.com)
+Sponsored by Remix America (http://remixamerica.org)
 
-Copyright (c) 2008
+Copyright (c) 2008 Matt Pelletier, Eastmedia (http://eastmedia.com)
+See MIT-LICENSE in this directory.
