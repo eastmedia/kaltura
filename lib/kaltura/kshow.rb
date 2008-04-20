@@ -4,11 +4,11 @@ require 'kaltura/user'
 
 module Kaltura
   class Kshow < Base
-    admin_session_for :generate_widget
+    admin_session_for :generate_widget, :clone_kshow
 
     define_attributes :name, :description, :thumbnailUrl
 
-    self.method_paths = { :create => "addkshow", :update => "updatekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget" }
+    self.method_paths = { :create => "addkshow", :update => "updatekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :clone_kshow => "clonekshow" }
 
     class << self
     
@@ -33,6 +33,17 @@ module Kaltura
       response = post(:generate_widget, @attributes)
       parse_response(response.body)
       @widget_code = (Hpricot.XML(result[:widget_code])/:generic_code).inner_html
+    end
+    
+    def clone_kshow
+      self.class.user_id = attributes[:user_id] if attributes[:user_id]
+      attributes[:kshow_id] = id
+      attributes.assert_required_keys(:kshow_id)
+      
+      retrieve_session_for(:clone_kshow)
+      response = post(:clone_kshow, @attributes)
+      parse_response(response.body)
+      self.class.find(id_from_result)
     end
     
     def add_entry(entry_attributes)

@@ -54,6 +54,11 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
     @kshow.generate_widget.should_not be_nil
   end
   
+  it "should be able to clone a kshow" do
+    cloned_kshow = @kshow.clone_kshow
+    cloned_kshow.should be_kind_of(Kaltura::Kshow)
+  end
+  
   it "should be able to add an entry" do
     attributes = { 
       :name => String.random,

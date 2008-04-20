@@ -57,7 +57,7 @@ module Kaltura
       end
       
       def id_from_result(result)
-        (Hpricot(result[primary_node_name])/:id).inner_text
+        Hpricot(result[primary_node_name]).search("/id").inner_text
       end
       
       def attributes_from_result(result)
