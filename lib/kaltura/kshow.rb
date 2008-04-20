@@ -4,11 +4,11 @@ require 'kaltura/user'
 
 module Kaltura
   class Kshow < Base
-    admin_session_for :generate_widget, :clone_kshow
+    admin_session_for :generate_widget, :clone_kshow, :destroy
 
     define_attributes :name, :description, :thumbnailUrl
 
-    self.method_paths = { :create => "addkshow", :update => "updatekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :clone_kshow => "clonekshow" }
+    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :clone_kshow => "clonekshow" }
 
     class << self
     
@@ -44,6 +44,18 @@ module Kaltura
       response = post(:clone_kshow, @attributes)
       parse_response(response.body)
       self.class.find(id_from_result)
+    end
+    
+    def destroy
+      self.class.user_id = attributes[:user_id] if attributes[:user_id]
+      attributes[:kshow_id] = id
+      attributes.assert_required_keys(:kshow_id)
+      
+      retrieve_session_for(:destroy)
+      response = post(:destroy, @attributes)
+      parse_response(response.body)
+      deleted_id = Hpricot.XML(result[:deleted_kshow]).search("/id").inner_text
+      deleted_id == id.to_s
     end
     
     def add_entry(entry_attributes)

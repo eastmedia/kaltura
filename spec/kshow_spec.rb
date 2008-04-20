@@ -59,6 +59,10 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
     cloned_kshow.should be_kind_of(Kaltura::Kshow)
   end
   
+  it "should be able to destroy a kshow" do
+    @kshow.destroy.should be_true
+  end
+  
   it "should be able to add an entry" do
     attributes = { 
       :name => String.random,
