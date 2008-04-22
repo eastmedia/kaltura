@@ -13,7 +13,7 @@ end
 describe Kaltura::Kshow, "using the real Kaltura backend" do
   before(:each) do
     load_config
-    @uid = "user_#{String.random}"
+    @uid = "uid_#{String.random}"
     @attr = {
       :name         => String.random,
       :description  => String.random,
@@ -55,7 +55,7 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
   end
   
   it "should be able to clone a kshow" do
-    cloned_kshow = @kshow.clone_kshow(:uid => @kshow.attributes[:puserId])
+    cloned_kshow = @kshow.clone_kshow(@kshow.attributes[:puserId])
     cloned_kshow.should be_kind_of(Kaltura::Kshow)
   end
   
@@ -65,11 +65,11 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
   
   it "should be able to add an entry" do
     attributes = { 
-      :name => String.random,
+      :name       => String.random,
       :media_type => Kaltura::Entry::IMAGE, 
-      :source => Kaltura::Entry::FLICKR, 
-      :url => "http://www.flickr.com/photos/14516334@N00/345009210/",
-      :uid => @uid
+      :source     => Kaltura::Entry::FLICKR, 
+      :url        => "http://www.flickr.com/photos/14516334@N00/345009210/",
+      :uid        => @uid
     }
     entry = @kshow.add_entry(attributes)
     entry.should be_a_kind_of(Kaltura::Entry)
