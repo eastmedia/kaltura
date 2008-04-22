@@ -41,11 +41,23 @@ module Kaltura
     end
   
     def session_key(options = {})
-      @session_key ||= create_session(false, options)
+      if @session_key && uid_from_session_key(@session_key) == options[:uid]
+        @session_key
+      else
+        @session_key = create_session(false, options)
+      end
     end
 
     def admin_session_key(options = {})
-      @admin_session_key ||= create_session(true, options)
+      if @admin_session_key && uid_from_session_key(@admin_session_key) == options[:uid]
+        @admin_session_key
+      else
+        @admin_session_key = create_session(true, options)
+      end
+    end
+    
+    def uid_from_session_key(key)
+      Base64.decode64(key).split(";").last
     end
 
     def connection

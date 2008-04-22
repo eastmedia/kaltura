@@ -37,6 +37,7 @@ module Kaltura
     
     def clone_kshow(uid)
       attributes[:kshow_id] = id
+      attributes[:uid] = uid
       attributes.assert_required_keys(:kshow_id)
       
       retrieve_session_for(:clone_kshow, uid)
