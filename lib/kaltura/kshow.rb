@@ -62,11 +62,13 @@ module Kaltura
     
     def entries
       return [] unless attributes[:entrys]
-      Hpricot.XML(attributes[:entrys]).children.inject([]) do |entries, node|
+      x = Hpricot.XML(attributes[:entrys]).children.inject([]) do |entries, node|
         next entries if node.name == "num_0"
         entries << Kaltura::Entry.new_from_node(node)
         entries
       end
+      logger.info "Kshow::entries: #{x.inspect}".yellow
+      x
     end
     
     def views_count

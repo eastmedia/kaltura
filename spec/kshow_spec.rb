@@ -84,6 +84,7 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
       @entry = @kshow.add_entry(@attributes)
       kshow = Kaltura::Kshow.find(@kshow.id, :uid => @kshow.puser_id)
       kshow.entries.should_not == []
+      kshow.entries.first.id.should == @entry.id
     end
   end
 end
