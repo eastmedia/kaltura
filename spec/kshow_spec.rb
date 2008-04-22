@@ -55,7 +55,7 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
   end
   
   it "should be able to clone a kshow" do
-    cloned_kshow = @kshow.clone_kshow(@kshow.attributes[:puserId])
+    cloned_kshow = @kshow.clone_kshow(@kshow.puser_id)
     cloned_kshow.should be_kind_of(Kaltura::Kshow)
   end
   
@@ -63,16 +63,27 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
     @kshow.destroy.should be_true
   end
   
-  it "should be able to add an entry" do
-    attributes = { 
-      :name       => String.random,
-      :media_type => Kaltura::Entry::IMAGE, 
-      :source     => Kaltura::Entry::FLICKR, 
-      :url        => "http://www.flickr.com/photos/14516334@N00/345009210/",
-      :uid        => @uid
-    }
-    entry = @kshow.add_entry(attributes)
-    entry.should be_a_kind_of(Kaltura::Entry)
-    entry.should_not be_new
+  describe "concerning entries" do
+    before(:each) do
+      @attributes = { 
+        :name       => String.random,
+        :media_type => Kaltura::Entry::IMAGE, 
+        :source     => Kaltura::Entry::FLICKR, 
+        :url        => "http://www.flickr.com/photos/14516334@N00/345009210/",
+        :uid        => @kshow.puser_id
+      }
+    end
+    
+    it "should be able to add an entry" do
+      @entry = @kshow.add_entry(@attributes)
+      @entry.should be_a_kind_of(Kaltura::Entry)
+      @entry.should_not be_new
+    end
+    
+    it "should correctly read its entries array" do
+      @entry = @kshow.add_entry(@attributes)
+      kshow = Kaltura::Kshow.find(@kshow.id, :uid => @kshow.puser_id)
+      kshow.entries.should_not == []
+    end
   end
 end

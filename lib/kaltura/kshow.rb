@@ -6,7 +6,7 @@ module Kaltura
   class Kshow < Base
     admin_session_for :generate_widget, :clone_kshow, :destroy
 
-    define_attributes :name, :description, :thumbnailUrl
+    define_attributes :name, :description, :thumbnailUrl, :puserId
 
     self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :clone_kshow => "clonekshow" }
 
