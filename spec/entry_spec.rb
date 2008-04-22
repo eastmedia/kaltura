@@ -16,8 +16,8 @@ end
 describe Kaltura::Entry, "using the real Kaltura backend" do
   before(:each) do
     load_config
-    @kshow = Kaltura::Kshow.new(:name => String.random, :description => String.random)
-    @kshow.save
+    @user_id = "user_#{String.random}"
+    @kshow = Kaltura::Kshow.create(:name => String.random, :description => String.random, :uid => @user_id)
   end
   
   it "should be able to create an entry" do
@@ -26,7 +26,8 @@ describe Kaltura::Entry, "using the real Kaltura backend" do
       :media_type => Kaltura::Entry::IMAGE, 
       :source     => Kaltura::Entry::FLICKR, 
       :url        => "http://www.flickr.com/photos/14516334@N00/345009210/",
-      :kshow_id   => @kshow.id
+      :kshow_id   => @kshow.id,
+      :uid        => @user_id
     }
     entry = Kaltura::Entry.create(attributes)
     entry.should be_a_kind_of(Kaltura::Entry)

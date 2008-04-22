@@ -39,7 +39,7 @@ end
 describe Kaltura, "using the real Kaltura backend" do
   before(:each) do
     load_config
-    @user_id = "user_#{String.random}"
+    @uid = "uid_#{String.random}"
   end
   
   after(:each) do
@@ -47,7 +47,7 @@ describe Kaltura, "using the real Kaltura backend" do
   end
 
   it "should create an admin session when none exists" do
-    Kaltura.admin_session_key(:uid => @user_id).should_not be_nil
+    Kaltura.admin_session_key(:uid => @uid).should_not be_nil
   end
 
 end

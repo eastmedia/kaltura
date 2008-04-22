@@ -25,15 +25,11 @@ module Kaltura
       MEDIA_COMMONS = 13,
     ]
     
-    self.method_paths = { :update => "updateentry", :create => "addentry" }
+    self.method_paths = { :find => "getentry", :update => "updateentry", :create => "addentry" }
 
     define_attributes :name, :sourceLink, :mediaType, :type, :thumbnailUrl, :kshowId
     
     class << self
-      def element_path
-        site_path("getentry")
-      end
-    
       def find(id, options = {})
         attributes[:entry_id] = id
         attributes.assert_required_keys(:entry_id)
@@ -49,18 +45,17 @@ module Kaltura
       end
 
       def attributes_from_result(result)
-        attributes_from_node(Hpricot(result[:entry1_]))
+        attributes_from_node(Hpricot(result[:entries]).children.first)
       end
 
       def id_from_result(result)
-        (Hpricot(result["#{attribute_prefix}_".to_sym])/:id).inner_text
+        Hpricot(result[:entries]).search("entry1_/id").inner_text
       end
     end
     
-  protected
+  private
   
     def before_create
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
       self.class.prefix_attributes!(attributes)
       attributes.assert_required_keys(:kshow_id)
     end

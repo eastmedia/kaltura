@@ -35,18 +35,15 @@ module Kaltura
       
     end
   
-  protected
+  private
   
     def before_create
       self.class.prefix_attributes!(attributes)
     end
 
     def before_update
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
       self.class.prefix_attributes!(attributes)
-      attributes[:user_id] = id
-      self.class.user_id = id
-      attributes.assert_required_keys(:user_id)
+      attributes[:uid] = id
     end
 
   end

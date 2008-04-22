@@ -16,39 +16,38 @@ module Kaltura
       end
 
       def post(path, options = {})
-        options[:uid] ||= user_id
+        options[:uid] ||= options[:user_id]
         Kaltura.post(self.method_paths[path], options)
       end
-      
-      attr_accessor_with_default(:user_id,      2)
-      attr_accessor_with_default(:primary_key,  :id)
+
+      attr_accessor_with_default(:primary_key, :id)
 
       def create(attributes = {})
         self.new(attributes).save
       end
-      
+
       def find_all(options)
-        options[:ks] = retrieve_session_for(:find_all)
+        options[:ks] = retrieve_session_for(:find_all, options[:uid])
         response = post(:find_all, options)
         collection = collection_from_response(response.body) || []
         collection.map { |record| instantiate_record(record) }
       end
-      
+
       def find(id, options = {})
-        options[:ks] = retrieve_session_for(:find)
+        options[:ks] = retrieve_session_for(:find, options[:uid])
         response = post(:find, options)
         instantiate_record(response.body)
       end
-      
+
       def instantiate_record(node)
         result = parse_node_from_response(:result, node)
         self.new(attributes_from_result(result))
       end
-      
+
       def new_from_node(node)
         self.new(attributes_from_node(node))
       end
-      
+
       def attributes_from_node(node)
         node.children.inject({}) do |nodes,el|
           nodes[el.name.to_sym] = el.inner_html
@@ -106,8 +105,8 @@ module Kaltura
         admin_session_methods.include?(method_name)
       end
 
-      def retrieve_session_for(method_name)
-        admin_session_for?(method_name) ? Kaltura.admin_session_key(:uid => user_id) : Kaltura.session_key(:uid => user_id)
+      def retrieve_session_for(method_name, uid)
+        admin_session_for?(method_name) ? Kaltura.admin_session_key(:uid => uid) : Kaltura.session_key(:uid => uid)
       end
 
     end
@@ -161,7 +160,7 @@ module Kaltura
       self
     end
     
-  protected
+  private
     
     def post(path, options = {})
       self.class.post(path, options)
@@ -169,16 +168,15 @@ module Kaltura
     
     def update
       before_update
-      retrieve_session_for(:update)
+      retrieve_session_for(:update, @attributes[:uid])
       response = post(:update, @attributes)
       self.parse_response(response.body)
-      # self.id = id_from_result
       load_attributes_from_result
     end
 
     def create
       before_create
-      retrieve_session_for(:create)
+      retrieve_session_for(:create, @attributes[:uid])
       response = post(:create, @attributes)
       self.parse_response(response.body)
       self.id = id_from_result
@@ -201,12 +199,10 @@ module Kaltura
       # Stub to be overridden
     end
     
-    def retrieve_session_for(method_name)
-      @attributes[:ks] = self.class.retrieve_session_for(method_name)
+    def retrieve_session_for(method_name, uid)
+      @attributes[:ks] = self.class.retrieve_session_for(method_name, uid)
     end
     
-  private
-
     def logger
       self.class.logger
     end

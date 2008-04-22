@@ -16,12 +16,15 @@ end
 describe Kaltura::User, "using the real Kaltura backend" do
   before(:each) do
     load_config
+    @uid = "uid_#{String.random}"
+    @user_id = "user_#{String.random}"
     @attributes = {
-      :user_id      => "user_#{String.random}",
+      :user_id      => @user_id,
       :screenName   => "Screen #{String.random}", 
       :fullName     => "Fullname #{String.random}",
       :email        => "#{String.random}@#{String.random}.com",
-      :aboutMe      => "About #{String.random}"
+      :aboutMe      => "About #{String.random}",
+      :uid          => @uid
     }
   end
   
@@ -30,17 +33,15 @@ describe Kaltura::User, "using the real Kaltura backend" do
   end
   
   it "should be able to create a user" do
-    user_id = "user_#{String.random}"
-    user = Kaltura::User.create(@attributes.merge(:user_id => user_id))
+    user = Kaltura::User.create(@attributes)
     user.should be_a_kind_of(Kaltura::User)
-    user.id.should == user_id
+    user.id.should == @user_id
   end
 
   describe "retrieving a user" do
     before(:each) do
-      @user_id = "user_#{String.random}"
-      Kaltura::User.create(@attributes.merge(:user_id => @user_id))
-      @user = Kaltura::User.find(@user_id)
+      Kaltura::User.create(@attributes)
+      @user = Kaltura::User.find(@user_id, :uid => @user_id)
     end
     
     it "should be able to retrieve the correct user" do
@@ -52,7 +53,7 @@ describe Kaltura::User, "using the real Kaltura backend" do
       @user.screen_name.should == @attributes[:screenName]
     end
     
-    it "should be able to update a user" do
+    xit "should be able to update a user" do
       pending "Kaltura fails indicating screen name already exists, but none was included in the POST" do
         full_name = "Fun #{String.random}"
         @user.full_name = full_name

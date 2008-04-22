@@ -1,4 +1,4 @@
-# require 'colored'
+require 'colored'
 require 'active_support'
 require 'active_resource'
 require 'kaltura/kshow'
@@ -66,11 +66,10 @@ module Kaltura
         :format       => FORMATS[:xml],
         :partner_id   => config[:partner_id],
         :subp_id      => config[:subpartner_id],
-        :detailed     => 1,
-        :uid          => 2
+        :detailed     => 1
       }.merge(form_params.symbolize_keys)
       params.assert_required_keys(:format, :partner_id, :subp_id, :uid)
-      # logger.info "TO_FORM_DATA: #{params.inspect}".magenta
+      logger.info "TO_FORM_DATA: #{params.inspect}".magenta
       serialize_params(params)
     end
     

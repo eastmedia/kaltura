@@ -29,30 +29,28 @@ module Kaltura
   
     def generate_widget
       return @widget_code if @widget_code
-      retrieve_session_for(:generate_widget)
-      response = post(:generate_widget, @attributes)
+      retrieve_session_for(:generate_widget, attributes[:uid])
+      response = post(:generate_widget, attributes)
       parse_response(response.body)
       @widget_code = (Hpricot.XML(result[:widget_code])/:generic_code).inner_html
     end
     
-    def clone_kshow
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
+    def clone_kshow(uid)
       attributes[:kshow_id] = id
       attributes.assert_required_keys(:kshow_id)
       
-      retrieve_session_for(:clone_kshow)
-      response = post(:clone_kshow, @attributes)
+      retrieve_session_for(:clone_kshow, uid)
+      response = post(:clone_kshow, attributes)
       parse_response(response.body)
-      self.class.find(id_from_result)
+      self.class.find(id_from_result, :uid => uid)
     end
     
     def destroy
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
       attributes[:kshow_id] = id
       attributes.assert_required_keys(:kshow_id)
       
-      retrieve_session_for(:destroy)
-      response = post(:destroy, @attributes)
+      retrieve_session_for(:destroy, attributes[:uid])
+      response = post(:destroy, attributes)
       parse_response(response.body)
       deleted_id = Hpricot.XML(result[:deleted_kshow]).search("/id").inner_text
       deleted_id == id.to_s
@@ -91,15 +89,13 @@ module Kaltura
       show_entry.thumbnail_url
     end
   
-  protected
+  private
     
     def before_create
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
       self.class.prefix_attributes!(attributes)
     end
     
     def before_update
-      self.class.user_id = attributes[:user_id] if attributes[:user_id]
       self.class.prefix_attributes!(attributes)
       attributes[:kshow_id] = id
       attributes.assert_required_keys(:kshow_id)
