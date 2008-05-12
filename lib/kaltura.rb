@@ -4,8 +4,12 @@ require 'active_resource'
 require 'kaltura/kshow'
 require 'kaltura/user'
 
-Object.const_set(:RAILS_DEFAULT_LOGGER, Logger.new(File.dirname(__FILE__) + '/../test.log')) unless defined?(RAILS_DEFAULT_LOGGER)
-ActiveResource::Base.logger = RAILS_DEFAULT_LOGGER
+unless defined?(RAILS_DEFAULT_LOGGER)
+  Object.const_set(:RAILS_DEFAULT_LOGGER, Logger.new(File.dirname(__FILE__) + '/../test.log'))
+  ActiveResource::Base.logger = RAILS_DEFAULT_LOGGER
+else
+  ActiveResource::Base.logger = Logger.new(RAILS_ROOT + '/log/kaltura.log')
+end
 
 class Hash
   def assert_required_keys(*required_keys)
