@@ -2,13 +2,16 @@ development:
   partner_id: 123
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
+  staging: true
 
 test:
   partner_id: 123
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
+  staging: true
 
 production:
   partner_id: 123
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
+  staging: false

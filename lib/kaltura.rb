@@ -25,7 +25,7 @@ module Kaltura
     end
   
     def site
-      URI.parse("http://www.kaltura.com/")
+      config[:staging] == true ? URI.parse("http://sandbox.kaltura.com/") : URI.parse("http://www.kaltura.com/")
     end
   
     def site_path(path)
