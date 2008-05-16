@@ -8,7 +8,7 @@ module Kaltura
 
     define_attributes :name, :description, :thumbnailUrl, :puserId
 
-    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :clone_kshow => "clonekshow" }
+    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :add_widget => "addwidget", :clone_kshow => "clonekshow" }
 
     class << self
     
@@ -26,7 +26,18 @@ module Kaltura
       end
 
     end
-  
+
+    def add_widget
+      return @widget_code if @widget_code
+      attributes[:kshow_id] = id
+      attributes[:uiConfId] = Kaltura.config[:ui_conf_id]
+
+      retrieve_session_for(:add_widget, attributes[:uid])
+      response = post(:add_widget, attributes)
+      parse_response(response.body)
+      @widget_code = (Hpricot.XML(result[:widget_code])/:generic_code).inner_html
+    end
+
     def generate_widget
       return @widget_code if @widget_code
       retrieve_session_for(:generate_widget, attributes[:uid])
