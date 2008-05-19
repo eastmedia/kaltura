@@ -27,15 +27,17 @@ module Kaltura
 
     end
 
-    def add_widget
+    def add_widget(partner_data = nil)
       return @widget_code if @widget_code
-      attributes[:kshow_id] = id
-      attributes[:uiConfId] = Kaltura.config[:ui_conf_id]
+
+      attributes[:widget_kshowId] = id
+      attributes[:widget_uiConfId] = Kaltura.config[:ui_conf_id]
+      attributes[:widget_partnerData] = partner_data
 
       retrieve_session_for(:add_widget, attributes[:uid])
       response = post(:add_widget, attributes)
       parse_response(response.body)
-      @widget_code = (Hpricot.XML(result[:widget_code])/:generic_code).inner_html
+      @widget_code = (Hpricot.XML(result[:widget])/:widgetHtml).inner_html
     end
 
     def generate_widget

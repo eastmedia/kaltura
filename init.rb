@@ -2,6 +2,7 @@ $: << File.dirname(__FILE__) + '/../lib'
 
 require 'rubygems'
 require 'kaltura'
+require File.dirname(__FILE__) + '/patches/patch_for_activeresource_connection'
 
 kaltura_yml = File.join(RAILS_ROOT, 'config', 'kaltura.yml')
 unless File.exists?(kaltura_yml)

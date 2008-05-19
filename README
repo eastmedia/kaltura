@@ -14,6 +14,8 @@ Pre-requisites
 * ActiveSupport
 * ActiveResource
 
+Please note that there is a small bug in ActiveResource, where it will not return the response data if the response contains unescaped %'s.  See patches/patch_for_activeresource_connection.rb for the fix.
+
 Credits
 ======================
 
