@@ -31,7 +31,15 @@ module Kaltura
     def site
       URI.parse(site_url)
     end
-  
+    
+    def site_host_for_swf
+      if config[:staging] == true
+        "3"
+      else
+        "1"
+      end
+    end
+    
     def site_url
       if config[:staging] == true
         "http://sandbox.kaltura.com"
