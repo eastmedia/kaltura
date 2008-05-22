@@ -26,6 +26,10 @@ module Kaltura
         self.new(attributes).save
       end
 
+      def destroy(attributes = {})
+        self.new(attributes).destroy
+      end
+
       def find_all(options)
         options[:ks] = retrieve_session_for(:find_all, options[:uid])
         response = post(:find_all, options)
@@ -144,6 +148,10 @@ module Kaltura
       new? ? create : update
     end
     
+    def destroy
+      do_destroy
+    end
+
     def parse_response(response)
       if response['Content-Length'] != "0" && response.strip.size > 0
         @errors = self.class.parse_node_from_response(:error, response)
@@ -183,6 +191,15 @@ module Kaltura
       load_attributes_from_result
     end
 
+    def do_destroy
+      before_destroy
+      retrieve_session_for(:destroy, @attributes[:uid])
+      response = post(:destroy, @attributes)
+      self.parse_response(response.body)
+      self.id = id_from_result
+      load_attributes_from_result
+    end
+
     def load_attributes_from_result
       load(self.class.attributes_from_result(result))
     end
@@ -199,6 +216,10 @@ module Kaltura
       # Stub to be overridden
     end
     
+    def before_destroy
+      # Stub to be overriden
+    end
+
     def retrieve_session_for(method_name, uid)
       @attributes[:ks] = self.class.retrieve_session_for(method_name, uid)
     end

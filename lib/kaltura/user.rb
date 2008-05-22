@@ -3,9 +3,10 @@ require 'kaltura/base'
 module Kaltura
   class User < Base
     define_attributes :screenName, :fullName, :email, :aboutMe, :tags, :gender
-    admin_session_for :create, :update
+    admin_session_for :create, :update, :destroy, :update_user_id, :find
     
-    self.method_paths = { :create => "adduser", :update => "updateuser", :find => "getuser" }
+    self.method_paths = { :create => "adduser", :update => "updateuser", :find => "getuser", :destroy => "deleteuser",
+                          :update_user_id => "updateuserid", :find => "getuser" }
     
     class << self
       def primary_key
@@ -32,9 +33,20 @@ module Kaltura
         options.update(:user_id => id)
         super(id, options)
       end
-      
+
     end
-  
+
+    def update_user_id(new_user_id)
+      attributes[:user_id] = id
+      attributes[:new_user_id] = new_user_id
+      attributes.assert_required_keys(:user_id, :new_user_id)
+      
+      retrieve_session_for(:update_user_id, attributes[:puserId])
+      response = post(:update_user_id, attributes)
+      parse_response(response.body)
+      self.class.find(id_from_result, :uid => new_user_id)
+    end
+
   private
   
     def before_create
