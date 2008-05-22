@@ -53,7 +53,11 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
   it "should be able to generate a widget" do
     @kshow.generate_widget.should_not be_nil
   end
-  
+
+  it "should be able to add a widget" do
+    @kshow.add_widget.should_not be_nil
+  end
+
   it "should be able to clone a kshow" do
     cloned_kshow = @kshow.clone_kshow(@kshow.puser_id)
     cloned_kshow.should be_kind_of(Kaltura::Kshow)
