@@ -84,7 +84,11 @@ module Kaltura
       logger.info "Kshow::entries: #{x.inspect}".yellow
       x
     end
-    
+
+    def status
+      attributes[:status].to_i
+    end
+
     def views_count
       attributes[:plays].to_i
     end
