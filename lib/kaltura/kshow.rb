@@ -27,11 +27,11 @@ module Kaltura
 
     end
 
-    def add_widget(partner_data = nil)
+    def add_widget(ui_conf_id, partner_data = nil)
       return @widget_code if @widget_code
 
       attributes[:widget_kshowId] = id
-      attributes[:widget_uiConfId] = Kaltura.config[:ui_conf_id]
+      attributes[:widget_uiConfId] = ui_conf_id
       attributes[:widget_partnerData] = partner_data
 
       retrieve_session_for(:add_widget, attributes[:uid])
