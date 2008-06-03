@@ -8,7 +8,7 @@ module Kaltura
 
     define_attributes :name, :description, :thumbnailUrl, :puserId
 
-    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :add_widget => "addwidget", :clone_kshow => "clonekshow" }
+    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :add_widget => "addwidget", :clone_kshow => "clonekshow", :get_all_entries => "getallentries" }
 
     class << self
     
@@ -69,15 +69,30 @@ module Kaltura
       deleted_id = Hpricot.XML(result[:deleted_kshow]).search("/id").inner_text
       deleted_id == id.to_s
     end
+
+    def get_all_entries
+      attributes[:kshow_id] = id
+      attributes[:list_type] = 4
+      attributes.assert_required_keys(:kshow_id)
+
+      retrieve_session_for(:get_all_entries, attributes[:uid])
+      response = post(:get_all_entries, attributes)
+      parse_response(response.body)
+      result[:show]
+    end
     
     def add_entry(entry_attributes)
       Kaltura::Entry.create(entry_attributes.merge(:kshow_id => id))
     end
-    
-    def entries
+
+    def all_entries
+      entries(get_all_entries)
+    end
+
+    def entries(source = nil)
       return [] unless attributes[:entrys]
-      x = Hpricot.XML(attributes[:entrys]).children.inject([]) do |entries, node|
-        next entries if node.name == "num_0"
+      x = Hpricot.XML(source || attributes[:entrys]).children.inject([]) do |entries, node|
+        next entries if node.name == "num_0" && source.nil?
         entries << Kaltura::Entry.new_from_node(node)
         entries
       end
