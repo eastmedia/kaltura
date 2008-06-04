@@ -104,6 +104,10 @@ module Kaltura
       attributes[:status].to_i
     end
 
+    def blank?
+      ((status & 8) <=> 0) == 0 ? true : false
+    end
+
     def views_count
       attributes[:plays].to_i
     end
