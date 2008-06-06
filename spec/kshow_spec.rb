@@ -55,7 +55,7 @@ describe Kaltura::Kshow, "using the real Kaltura backend" do
   end
 
   it "should be able to add a widget" do
-    @kshow.add_widget.should_not be_nil
+    @kshow.add_widget(Kaltura.config[:embed_ui_conf_id]).should_not be_nil
   end
 
   it "should be able to clone a kshow" do

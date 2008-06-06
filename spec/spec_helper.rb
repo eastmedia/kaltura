@@ -3,6 +3,7 @@ require 'rubygems'
 require 'test/unit'
 require 'spec'
 require 'kaltura'
+require File.dirname(__FILE__) + '/../patches/patch_for_activeresource_connection'
 
 unless defined?(RAILS_ENV)
   RAILS_ENV = "test"
