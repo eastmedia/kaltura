@@ -3,6 +3,7 @@ require 'active_support'
 require 'active_resource'
 require 'kaltura/kshow'
 require 'kaltura/user'
+require 'kaltura/moderation'
 
 unless defined?(RAILS_DEFAULT_LOGGER)
   Object.const_set(:RAILS_DEFAULT_LOGGER, Logger.new(File.dirname(__FILE__) + '/../test.log'))
