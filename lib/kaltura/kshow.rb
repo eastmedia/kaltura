@@ -4,11 +4,11 @@ require 'kaltura/user'
 
 module Kaltura
   class Kshow < Base
-    admin_session_for :generate_widget, :clone_kshow, :destroy
+    admin_session_for :generate_widget, :clone_kshow, :destroy, :update_kshow_owner
 
     define_attributes :name, :description, :thumbnailUrl, :puserId
 
-    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :add_widget => "addwidget", :clone_kshow => "clonekshow", :get_all_entries => "getallentries" }
+    self.method_paths = { :create => "addkshow", :update => "updatekshow", :destroy => "deletekshow", :find => "getkshow", :find_all => "listkshows", :generate_widget => "generatewidget", :add_widget => "addwidget", :clone_kshow => "clonekshow", :get_all_entries => "getallentries", :update_kshow_owner => "updatekshowowner" }
 
     class << self
     
@@ -47,7 +47,19 @@ module Kaltura
       parse_response(response.body)
       @widget_code = (Hpricot.XML(result[:widget_code])/:generic_code).inner_html
     end
-    
+
+    def update_username(new_username)
+      attributes[:kshow_id] = id
+      attributes[:user_id] = new_username
+
+      attributes.assert_required_keys(:kshow_id, :user_id)
+
+      retrieve_session_for(:update_kshow_owner, new_username)
+      response = post(:update_kshow_owner, attributes)
+      parse_response(response.body)
+      self.class.find(id_from_result, :uid => new_username)
+    end
+
     def clone_kshow(uid)
       attributes[:kshow_id] = id
       attributes[:uid] = uid
