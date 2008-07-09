@@ -16,6 +16,15 @@ Pre-requisites
 
 Please note that there is a small bug in ActiveResource, where it will not return the response data if the response contains unescaped %'s.  See patches/patch_for_activeresource_connection.rb for the fix.
 
+Example
+======================
+
+# Creating a new Kshow:
+ks = Kaltura::Kshow.new
+ks.name = 'Example Kshow'
+ks.puser_id = 'kaltura_user_id'
+ks.save
+
 Credits
 ======================
 
