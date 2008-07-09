@@ -31,6 +31,6 @@ describe Kaltura::Entry, "using the real Kaltura backend" do
     }
     entry = Kaltura::Entry.create(attributes)
     entry.should be_a_kind_of(Kaltura::Entry)
-    entry.id.to_i.should > 0
+    entry.id.should_not be_nil
   end
 end
