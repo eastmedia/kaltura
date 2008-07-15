@@ -8,7 +8,17 @@ Replace the values with your own partner info that you received from Kaltura.
 
 Specs are to test the Kaltura API directly, not this library itself.
 
-Pre-requisites
+Kaltura Pre-requisites
+======================
+
+You will need to signup for a Kaltura partner account so you can setup kaltura.yml in your RAILS_ROOT/config (see templates/kaltura.yml.template).
+
+A note about Kaltura "ks" sessions
+======================
+
+Kaltura's backend uses its own session system that is completely independent from the Rails session. Kaltura's implementation requires that some requests use a regular session id, and some use an 'admin' session id. We have attempted to completely encapsulate it in the API's lower-level calls so you don't need to worry about which kind to make (see Kshow#admin_session_for to see which ones require admin sessions). When using the SWFs in views you may need to specify a ks. We will be posting some examples shortly displaying Kaltura's views.
+
+Code Pre-requisites
 ======================
 
 * ActiveSupport
