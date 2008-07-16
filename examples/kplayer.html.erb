@@ -1,0 +1,33 @@
+<%
+  # Requires SWFObject v1.4.4: Flash Player detection and embed - http://blog.deconcept.com/swfobject/
+  # uid must be the owner of the video.
+  uid = video.user.username
+
+  # 'video' is expected to be *your own* Video class with at least one attribute: kshow_id, which contains
+  # the kshowId created by Kaltura.  video.kshow_id is used below in line #20.
+%>
+<div id="player"></div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  var so = new SWFObject('<%= Kaltura.site_url %>/index.php/kwidget/wid/12101', 'gallery_flashCont2', '540', '425', '9', '#000000');
+  so.addParam('menu',                 'false');
+  so.addParam('allowScriptAccess',    'always');
+  so.addParam('allowNetworking',      'all');
+  so.addParam('allowfullscreen',      'true');
+  so.addParam('wmode',                'opaque');
+
+  so.addVariable('entryId',       -1);
+  so.addVariable('kshowId',       '<%= video.kshow_id %>');
+  so.addVariable('partner_id',    '<%= Kaltura.config[:partner_id] %>');
+  so.addVariable('subp_id',       '<%= Kaltura.config[:subpartner_id] %>');
+  so.addVariable('uid',           '<%= uid %>');
+  so.addVariable('ks',            '<%= Kaltura.session_key(:uid => uid) %>');
+  so.addVariable('host',          <%= Kaltura.site_host_for_swf %>);
+  so.addVariable('lconid',        'en');
+  so.addVariable('uiConfId',      <%= Kaltura.config[:simple_player_ui_conf_id] %>);
+
+  so.write('player');
+  // ]]>
+</script>

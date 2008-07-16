@@ -1,0 +1,17 @@
+###### kplayer.html.erb
+
+An example using SWFObject to load a given Kshow inside the Kaltura player.
+
+###### simple_editor.html.erb
+
+An example using SWFObject to load a given Kshow inside the Kaltura simple editor.
+
+###### Sessions
+
+In your ApplicationController, be sure to define an around_filter to reset the Kaltura sessions:
+
+  around_filter :clear_kaltura_sessions
+
+  def clear_kaltura_sessions
+    Kaltura.clear_sessions!
+  end
