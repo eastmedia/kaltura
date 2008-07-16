@@ -3,6 +3,8 @@ development:
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
   embed_ui_conf_id: 1
+  simple_editor_ui_conf_id: 1
+  simple_player_ui_conf_id: 1
   staging: true
 
 test:
@@ -10,6 +12,8 @@ test:
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
   embed_ui_conf_id: 1
+  simple_editor_ui_conf_id: 1
+  simple_player_ui_conf_id: 1
   staging: true
 
 production:
@@ -17,4 +21,6 @@ production:
   subpartner_id: 12300
   secret: dsadij8223d3r8938hfsoha9w7g39g32
   embed_ui_conf_id: 1
+  simple_editor_ui_conf_id: 1
+  simple_player_ui_conf_id: 1
   staging: false
